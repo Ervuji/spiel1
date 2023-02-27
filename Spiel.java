@@ -237,3 +237,272 @@ public class Spiel extends JFrame {
     StaircaseUpperpart.setzeAusgaenge( null, upperCorridor, staircase, HKoffice);
 
     HKoffice.setzeAusgaenge( null, StaircaseUpperpart, null, null);
+    upperCorridor.setzeAusgaenge( doorRoom3, null, doorRoom4, StaircaseUpperpart);
+
+    room3.setzeAusgaenge( null, null,  doorRoom3, null);
+
+    room4.setzeAusgaenge( doorRoom4, null, null, null);
+
+    underCorridor.setzeAusgaenge( fightRoom, libEntrance, null, null);
+
+    secretroom.setzeAusgaenge(null, null, fightRoom, null);
+
+    jTextArea1.setLineWrap(true);
+    jTextArea1.setWrapStyleWord(true);
+    jTextArea1.append("INTRODUCTION: Du bist ein neuer Schüler an einer neuen Schule und hast herausgefunden, dass hier seltsame Dinge vor sich gehen. Gerüchte über die Geschichte der Schule sind im Umlauf, einschließlich Geschichten über eine mächtige ägyptische Königin, die einst auf dem Schulgelände gelebt haben soll. Ein Kamerad erzählt dir von einem Geheimraum in der Schule, der mächtiges Wissen und Geheimnisse enthält, die seit Jahrhunderten bewacht werden. Ihr beginnt nach dem Raum zu suchen, aber die Suche wird durch verborgene Durchgänge, Fallen und Rätsel erschwert.\n");
+  }
+
+  // Anfang Methoden
+  public void jButton1_ActionPerformed(ActionEvent evt) {
+
+    jTextArea1.setText("");
+    String eingabe = jTextField1.getText();
+    
+    jButtonSuch.setVisible(true);
+    jButton1.setVisible(false);
+    
+    // --- Raum wechseln ---
+
+    inventory.addItem("Raum 102 Schlüssel");
+
+        if (eingabe.equals("Norden") && aktuellerRaum.nord != null) {
+            aktuellerRaum = aktuellerRaum.nord;
+
+       } else if (eingabe.equals("Osten") && aktuellerRaum.ost != null) {
+            aktuellerRaum = aktuellerRaum.ost;
+
+       } else if (eingabe.equals("Süden") && aktuellerRaum.sud != null) {
+            aktuellerRaum = aktuellerRaum.sud;
+
+       } else if (eingabe.equals("Westen") && aktuellerRaum.west != null) {
+            aktuellerRaum = aktuellerRaum.west;
+       }
+    
+    
+        if (eingabe.equals("Suchen") && aktuellerRaum.name == "Raum 102"){
+          inventory.addItem("Ra's Auge Halsband");
+          JOptionPane.showMessageDialog(null, "Sehr gut, du hast die erste Quest abgeschlossen. Die zweite Quest besteht darin, zu überprüfen, \nob sich etwas im Haus verändert hat. Ich denke, es gab ein Geräusch in der Küche. \nWarum gehst du nicht nachschauen?!","SECOND TASK", JOptionPane.PLAIN_MESSAGE);
+          
+        }  
+        if (inventory.hasItem("Ra's Auge Halsband")){
+          kitchen.setzeAusgaenge(null, firstCorridor, salon, ovenEntrance);
+          ovenEntrance.setzeAusgaenge(null, kitchen, null, secretentrance);
+          
+          
+        }else{
+          kitchen.setzeAusgaenge(null, firstCorridor, salon, null);
+          ovenEntrance.setzeAusgaenge(null, kitchen, null, null);
+        }
+    
+        if (inventory.hasItem("Raum 100 Schlüssel")){
+          doorRoom1.setzeAusgaenge(room1, null, firstCorridor, null);
+          doorRoom1.beschreibung = "Jetzt, da du den Schlüssel hast, kannst du eintreten.";
+        }else{
+          doorRoom1.setzeAusgaenge( null, null, firstCorridor, null);
+        }
+
+        if (inventory.hasItem("Raum 101 Schlüssel")){
+          doorRoom2.setzeAusgaenge( null, room2, null, firstCorridor);
+          doorRoom2.beschreibung = "Jetzt, da du den Schlüssel hast, kannst du eintreten.";
+        }else{
+          doorRoom2.setzeAusgaenge( null, null, null, firstCorridor);
+        }
+
+        if (inventory.hasItem("Raum 102 Schlüssel")){
+          doorRoom3.setzeAusgaenge( room3, null, upperCorridor, null);
+          doorRoom3.beschreibung = "Jetzt, da du den Schlüssel hast, kannst du eintreten.";
+        }else{
+          doorRoom3.setzeAusgaenge( upperCorridor, null, null, null);
+        }
+
+        if (aktuellerRaum.name == "Raum 102" && inventory.hasItem("Raum 102 Schlüssel")){
+          room3.setzeAusgaenge( null, null, upperCorridor, null);
+        }
+
+        if (aktuellerRaum.name == "Untergrundbibliothek" && inventory.hasItem("Ra's Auge Halsband")){
+          secretentrance.setzeAusgaenge( null, kitchen, null, libEntrance);
+        }
+
+        if (aktuellerRaum.name == "Library Secret entrance" && inventory.hasItem("Goldene Pyramide")){
+          libEntrance.setzeAusgaenge( null, secretentrance, null, underCorridor);
+          libEntrance.beschreibung = "Die Tür hat auf die Goldene Pyramide reagiert.";
+          
+          
+        }else {
+          libEntrance.setzeAusgaenge( null, secretentrance, null, null);
+        }
+
+        if (aktuellerRaum.name == "Library Secret entrance"){
+          seenSecretEntrance = true;
+        }
+
+        if (inventory.hasItem("Raum 103 Schlüssel")){
+          doorRoom4.setzeAusgaenge(upperCorridor, null, room4, null);
+          doorRoom4.beschreibung = "Jetzt, da du den Schlüssel hast, kannst du eintreten.";
+        }else{
+          doorRoom4.setzeAusgaenge(upperCorridor, null, null, null);
+        }
+    
+    
+        if (aktuellerRaum.name == "Eingang" && !isMessageShown){
+        JOptionPane.showMessageDialog(null, "Du bist jetzt ins Haus eingetreten und die erste Quest beginnt. Deine Aufgabe ist es, \nalle Räume zu besuchen und nach Gegenständen mit dem Button 'SUCH' zu suchen. \nVergiss nicht, dein Zimmer im Obergeschoss, Zimmernummer 102, zu besuchen. \nDu solltest bereits den Schlüssel dafür haben!","FIRST TASK", JOptionPane.PLAIN_MESSAGE);
+        isMessageShown = true;
+        }  
+    
+        if (eingabe.equals("Suchen") && inventory.hasItem("Ra's Auge Halsband") && seenSecretEntrance == true && aktuellerRaum.name == "Treppen"){
+           inventory.addItem("Goldene Pyramide");
+        }
+
+        if (eingabe.equals("Suchen")){
+          System.out.println(inventory.newItem());
+        }
+    // --- Beschreibung des aktuellen Raums ausgeben ---
+    bildLabel.setIcon(new ImageIcon(aktuellerRaum.bild));
+
+    jTextArea1.append(aktuellerRaum.beschreibung+"\n\n");
+
+    if(aktuellerRaum.name == "Geheimen Korridor" && finishFight == false){
+          isMessageShown = false;
+        }
+    // --- Kampf anfangen ---
+
+    if(aktuellerRaum.name == "Mistical Room" && finishFight == false){
+
+      jTextField1.setVisible(true);
+      jButton1.setVisible(true);
+      fightRoom.setzeAusgaenge(null, null, null, null);
+      jButtonSuch.setVisible(false);
+      jTextField1.setText("");
+      startFight = true;
+    }
+
+
+    
+
+    if (aktuellerRaum.name == "Mistical Room" && !isMessageShown && finishFight == false){
+      JOptionPane.showMessageDialog(null, "Du bist in den Kampfraum eingetreten. Dies ist dein letztes Hindernis, bevor du den geheimen \nRaum erreichen und dein Ziel erreichen kannst. In diesem Kampf sind deine Schäden um 20% \nhöher dank der zuvor erhaltenen goldenen Pyramide, aber deine Lebenspunkte sind im Vergleich \nzu deinem Gegner Anubis niedriger. \nDafür hast du jedoch mehr Ausdauer und jedes Mal, wenn du erfolgreich 'Dodge' benutzt,\ngewinnst du ein wenig Lebensenergie zurück. Sei dennoch vorsichtig, denn jedes Mal, wenn du\n'Dodge' benutzt, verbrauchst du auch Ausdauer, und der einzige Weg, sie zurückzugewinnen, \nist durch Verteidigung. \nVIEL GLÜCK!!","ALERT", JOptionPane.PLAIN_MESSAGE);
+
+      isMessageShown = true; 
+    }
+
+
+    
+    
+    if(aktuellerRaum.name == "Mistical Room" && startFight == true && finishFight == false){
+
+      if(startFight == true){
+         jTextArea1.append("Kampf info: \n" + " ---> " + Spieler.name + ": " + Spieler.lebenspunkte + "HP  / " + Spieler.Stamina + " STA");
+
+         jTextArea1.append("\n ---> " + Anubi.name + ": " + Anubi.lebenspunkte + "HP  / " + Anubi.Stamina + " STA");
+
+         jTextField1.setText("Attack");
+
+          if(attackiert == false){
+            jTextArea1.append("\n\nKampf optionen: "+"\n" + " ---> Attack  <-\n" + " ---> Defend\n" + " ---> Dodge");
+
+              if(eingabe.equals("Attack")){
+                Kampf.Attack();
+                attackiert = true;
+                verteidigt = false;
+            
+              }
+          
+          }else if(verteidigt == false && attackiert == true){
+            jTextField1.setText("Defend");
+            jTextArea1.append("\n\nKampf optionen: "+"\n" + " ---> Attack\n" + " ---> Defend <-\n" + " ---> Dodge <-");
+
+                if(eingabe.equals("Defend")){
+                  Kampf.Defend();
+                  attackiert = false;
+                  verteidigt = true;
+                }else if(Spieler.Stamina >= 20){
+                  jTextField1.setText("Dodge");
+                }
+                if(eingabe.equals("Dodge") && Spieler.Stamina >= 20){
+                  Kampf.Dodge();
+                  attackiert = false;
+                  verteidigt = true;
+                  jTextField1.setText("Dodge");
+                }else if(eingabe.equals("Dodge") && Spieler.Stamina < 20){
+                  JOptionPane.showMessageDialog(null, "Du hast nicht genug Ausdauer, um dem Angriff auszuweichen. Versuch stattdessen 'Defend' zu benutzen.","ALERT", JOptionPane.PLAIN_MESSAGE);
+                  attackiert = true;
+                  verteidigt = false;
+                }
+          }
+      }
+      
+    }else{
+      
+      if (inventory.hasAnyItem()){
+           jTextArea1.append(inventory.getInventoryString() +"\n");
+      }
+      jTextArea1.append("Richtungen: "+"\n");
+    }
+
+    if (Anubi.lebenspunkte == 0 && startFight == true && finishFight == false){
+      startFight = false;
+      finishFight = true;
+      JOptionPane.showMessageDialog(null, "DU HAST ANUBI GETÖTET!!!","ALERT", JOptionPane.PLAIN_MESSAGE);
+      jTextField1.setVisible(false);   
+      jButton1.setVisible(false);
+      jTextArea1.setText("");
+      jTextArea1.append("Quest abgeschlossen: Durch das Besiegen von Anubis wurde eine neue Tür geöffnet. Mach dich auf den Weg und finde das geheime Zimmer!\n\n");
+      aktuellerRaum = fightRoom;
+      fightRoom.setzeAusgaenge( secretroom,  null, underCorridor, null);  
+      fightRoom.beschreibung = "Dies ist der Raum, in dem du Anubis besiegt hast.";
+      fightRoom.bild = "Bilder/fightRoomAF.png";
+    }
+
+    if (Spieler.lebenspunkte == 0 && startFight == true){
+      startFight = false;
+      JOptionPane.showMessageDialog(null, "VERLOREN, ANUBI HAT DICH GETÖTET!!!","ALERT", JOptionPane.PLAIN_MESSAGE);
+      System.exit(0); 
+    }    
+    
+    // --- mögliche Ausgänge der Räume angeben ---
+
+    if (aktuellerRaum.nord != null){
+      jTextArea1.append(" ---> Norden: "+ aktuellerRaum.nord.name +"\n");
+      jButtonNorth.setVisible(true);
+    }else {
+      jButtonNorth.setVisible(false);
+    }
+    
+    if (aktuellerRaum.ost != null){
+      jTextArea1.append(" ---> Osten: "+ aktuellerRaum.ost.name +"\n");       
+      jButtonOst.setVisible(true);
+    }else{
+      jButtonOst.setVisible(false);
+    }
+    
+    if (aktuellerRaum.west != null){
+      jTextArea1.append(" ---> Westen: "+ aktuellerRaum.west.name +"\n");
+      
+      jButtonWest.setVisible(true);
+  
+     }else {
+      jButtonWest.setVisible(false);
+     }
+
+    if (aktuellerRaum.sud != null){
+      jTextArea1.append(" ---> Süden: "+ aktuellerRaum.sud.name +"\n"); 
+      jButtonSouth.setVisible(true); 
+    }else{
+      jButtonSouth.setVisible(false);
+    }
+
+  }
+
+  // Ende Methoden
+
+  public static void main(String[] args) {
+    try {
+      // Set System L&F
+      UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+    } catch (Exception e) {
+    }
+
+    new Spiel("HOUSE OF ANUBIS");
+  }
+}
+
